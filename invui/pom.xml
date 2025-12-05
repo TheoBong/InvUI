@@ -125,11 +125,6 @@
         </dependency>
         <dependency>
             <groupId>xyz.xenondevs.invui</groupId>
-            <artifactId>inventory-access-r21</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>xyz.xenondevs.invui</groupId>
             <artifactId>inventory-access-r22</artifactId>
             <version>${project.version}</version>
         </dependency>

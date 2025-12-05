@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.xenondevs.inventoryaccess.abstraction.inventory.AnvilInventory;
-import xyz.xenondevs.inventoryaccess.abstraction.inventory.CartographyInventory;
 import xyz.xenondevs.inventoryaccess.abstraction.util.InventoryUtils;
 import xyz.xenondevs.inventoryaccess.abstraction.util.ItemUtils;
 import xyz.xenondevs.inventoryaccess.abstraction.util.PlayerUtils;
@@ -22,13 +21,10 @@ public class InventoryAccess {
     private static final Class<ItemUtils> ITEM_UTILS_CLASS = ReflectionUtils.getImplClass("ItemUtilsImpl");
     private static final Class<PlayerUtils> PLAYER_UTILS_CLASS = ReflectionUtils.getImplClass("PlayerUtilsImpl");
     private static final Class<AnvilInventory> ANVIL_INVENTORY_CLASS = ReflectionUtils.getImplClass("AnvilInventoryImpl");
-    private static final Class<CartographyInventory> CARTOGRAPHY_INVENTORY_CLASS = ReflectionUtils.getImplClass("CartographyInventoryImpl");
-    
+
     private static final Constructor<AnvilInventory> ANVIL_INVENTORY_CONSTRUCTOR =
         ReflectionUtils.getConstructor(ANVIL_INVENTORY_CLASS, true, Player.class, ComponentWrapper.class, List.class);
-    private static final Constructor<CartographyInventory> CARTOGRAPHY_INVENTORY_CONSTRUCTOR =
-        ReflectionUtils.getConstructor(CARTOGRAPHY_INVENTORY_CLASS, true, Player.class, ComponentWrapper.class);
-    
+
     private static final InventoryUtils INVENTORY_UTILS = ReflectionUtils.constructEmpty(INVENTORY_UTILS_CLASS);
     private static final ItemUtils ITEM_UTILS = ReflectionUtils.constructEmpty(ITEM_UTILS_CLASS);
     private static final PlayerUtils PLAYER_UTILS = ReflectionUtils.constructEmpty(PLAYER_UTILS_CLASS);
@@ -73,15 +69,6 @@ public class InventoryAccess {
         return ReflectionUtils.construct(ANVIL_INVENTORY_CONSTRUCTOR, player, title == null ? BungeeComponentWrapper.EMPTY : title, renameHandlers);
     }
     
-    /**
-     * Creates a new {@link CartographyInventory}.
-     *
-     * @param player The {@link Player} that should see this {@link CartographyInventory}
-     * @param title  The inventory title
-     * @return The {@link CartographyInventory}
-     */
-    public static CartographyInventory createCartographyInventory(@NotNull Player player, @Nullable ComponentWrapper title) {
-        return ReflectionUtils.construct(CARTOGRAPHY_INVENTORY_CONSTRUCTOR, player, title == null ? BungeeComponentWrapper.EMPTY : title);
-    }
+
     
 }

@@ -44,27 +44,6 @@ public interface Window {
         consumer.accept(builder);
         return builder.build();
     }
-    
-    /**
-     * Creates a new {@link Builder.Normal.Split Window Builder} for a normal split window.
-     *
-     * @return The new {@link Builder.Normal.Split Window Builder}.
-     */
-    static @NotNull Builder.Normal.Split split() {
-        return new NormalSplitWindowImpl.BuilderImpl();
-    }
-    
-    /**
-     * Creates a new normal split {@link Window} after configuring a {@link Builder.Normal.Split Window Builder} with the given {@link Consumer}.
-     *
-     * @param consumer The {@link Consumer} to configure the {@link Builder.Normal.Split Window Builder}.
-     * @return The new {@link Window}.
-     */
-    static @NotNull Window split(@NotNull Consumer<Builder.Normal.@NotNull Split> consumer) {
-        Builder.Normal.Split builder = split();
-        consumer.accept(builder);
-        return builder.build();
-    }
 
     
     /**

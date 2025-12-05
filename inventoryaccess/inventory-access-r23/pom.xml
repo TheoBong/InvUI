@@ -19,6 +19,13 @@
         <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>codemc-nms-repository</id>
+            <url>https://repo.codemc.io/repository/nms/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
