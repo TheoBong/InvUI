@@ -502,7 +502,7 @@ public abstract class AbstractWindow implements Window, GuiParent {
     /**
      * Gets the content {@link xyz.xenondevs.invui.inventory.Inventory inventories} associated with this
      * {@link Window}. These are not UI inventories, but actual inventories contained inside the {@link Gui},
-     * such as {@link VirtualInventory}
+     * such as VirtualInventory
      *
      * @return The content inventories associated with this window.
      */

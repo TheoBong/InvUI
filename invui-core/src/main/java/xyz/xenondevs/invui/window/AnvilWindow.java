@@ -34,28 +34,8 @@ public interface AnvilWindow extends Window {
         consumer.accept(builder);
         return builder.build();
     }
-    
-    /**
-     * Creates a new {@link Builder.Split Window Builder} for a split {@link AnvilWindow}.
-     *
-     * @return The new {@link Builder.Split Window Builder}.
-     */
-    static @NotNull Builder.Split split() {
-        return new AnvilSplitWindowImpl.BuilderImpl();
-    }
-    
-    /**
-     * Creates a new split {@link AnvilWindow} after configuring a {@link Builder.Split Window Builder} using the given {@link Consumer}.
-     *
-     * @param consumer The {@link Consumer} to configure the {@link Builder.Split Window Builder}.
-     * @return The created {@link AnvilWindow}.
-     */
-    static @NotNull AnvilWindow split(Consumer<Builder.@NotNull Split> consumer) {
-        Builder.Split builder = split();
-        consumer.accept(builder);
-        return builder.build();
-    }
-    
+
+
     /**
      * Gets the current rename text.
      *
@@ -68,7 +48,6 @@ public interface AnvilWindow extends Window {
      *
      * @param <S> The builder type.
      * @see Window.Builder.Normal
-     * @see CartographyWindow.Builder
      */
     interface Builder<S extends Builder<S>> extends Window.Builder<AnvilWindow, S> {
         
@@ -95,7 +74,6 @@ public interface AnvilWindow extends Window {
          * for an {@link AnvilWindow} with only one {@link Gui} that does not access the {@link Player Player's} inventory.
          *
          * @see Window.Builder.Normal.Single
-         * @see CartographyWindow.Builder.Single
          */
         interface Single extends Builder<Single>, Window.Builder.Single<AnvilWindow, Single> {}
         
@@ -105,7 +83,6 @@ public interface AnvilWindow extends Window {
          * {@link Player Player's} inventory.
          *
          * @see Window.Builder.Normal.Split
-         * @see CartographyWindow.Builder.Split
          */
         interface Split extends Builder<Split>, Window.Builder.Double<AnvilWindow, Split> {}
         

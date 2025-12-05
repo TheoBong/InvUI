@@ -270,22 +270,9 @@ public abstract class AbstractGui implements Gui, GuiParent {
         
         if (!updateEvent.isCancelled()) {
             int leftOverAmount;
-            if (window instanceof AbstractDoubleWindow) {
-                Gui otherGui;
-                if (window instanceof AbstractSplitWindow) {
-                    AbstractSplitWindow splitWindow = (AbstractSplitWindow) window;
-                    Gui[] guis = splitWindow.getGuis();
-                    otherGui = guis[0] == this ? guis[1] : guis[0];
-                } else {
-                    otherGui = this;
-                }
-                
-                leftOverAmount = ((AbstractGui) otherGui).putIntoFirstInventory(updateReason, clicked, inventory);
-            } else {
-                Inventory playerInventory = ReferencingInventory.fromReversedPlayerStorageContents(player.getInventory());
-                leftOverAmount = playerInventory.addItem(null, inventory.getItem(slot));
-            }
-            
+            Inventory playerInventory = ReferencingInventory.fromReversedPlayerStorageContents(player.getInventory());
+            leftOverAmount = playerInventory.addItem(null, inventory.getItem(slot));
+
             clicked.setAmount(leftOverAmount);
             if (ItemUtils.isEmpty(clicked))
                 clicked = null;
@@ -368,7 +355,7 @@ public abstract class AbstractGui implements Gui, GuiParent {
         }
         
     }
-    
+
     /**
      * Handles a double click on an {@link SlotElement.InventorySlotElement}.
      *
@@ -379,12 +366,12 @@ public abstract class AbstractGui implements Gui, GuiParent {
     protected void handleInvDoubleClick(InventoryClickEvent event, Player player, ItemStack cursor) {
         if (cursor == null)
             return;
-        
+
         // windows handle cursor collect because it is a cross-inventory / cross-gui operation
         Window window = WindowManager.getInstance().getOpenWindow(player);
         ((AbstractWindow) window).handleCursorCollect(event);
     }
-    
+
     /**
      * Handles a middle click on an {@link SlotElement.InventorySlotElement}.
      *
@@ -396,7 +383,7 @@ public abstract class AbstractGui implements Gui, GuiParent {
     protected void handleInvMiddleClick(InventoryClickEvent event, Inventory inventory, int slot, Player player) {
         if (player.getGameMode() != GameMode.CREATIVE)
             return;
-        
+
         ItemStack cursor = inventory.getItem(slot);
         if (cursor != null)
             cursor.setAmount(cursor.getMaxStackSize());
@@ -416,7 +403,7 @@ public abstract class AbstractGui implements Gui, GuiParent {
         // cancel all clicks if the gui is frozen or an animation is running
         if (frozen || animation != null)
             return false;
-        
+
         SlotElement element = getSlotElement(slot);
         if (element != null) element = element.getHoldingElement();
         if (element instanceof SlotElement.InventorySlotElement) {
@@ -427,7 +414,7 @@ public abstract class AbstractGui implements Gui, GuiParent {
                 return inventory.setItem(updateReason, viSlot, newStack);
             }
         }
-        
+
         return false;
     }
     
@@ -445,16 +432,16 @@ public abstract class AbstractGui implements Gui, GuiParent {
         
         Player player = (Player) event.getWhoClicked();
         ItemStack clicked = event.getCurrentItem();
-        
+
         UpdateReason updateReason = new PlayerUpdateReason(player, event);
-        
+
         int amountLeft = putIntoFirstInventory(updateReason, clicked);
         if (amountLeft != clicked.getAmount()) {
             if (amountLeft != 0) event.getCurrentItem().setAmount(amountLeft);
             else event.getClickedInventory().setItem(event.getSlot(), null);
         }
     }
-    
+
     /**
      * Puts an {@link ItemStack} into the first {@link Inventory} that accepts it.
      *
@@ -466,7 +453,7 @@ public abstract class AbstractGui implements Gui, GuiParent {
     protected int putIntoFirstInventory(UpdateReason updateReason, ItemStack itemStack, Inventory... ignored) {
         Collection<Inventory> inventories = getAllInventories(ignored);
         int originalAmount = itemStack.getAmount();
-        
+
         if (!inventories.isEmpty()) {
             for (Inventory inventory : inventories) {
                 int amountLeft = inventory.addItem(updateReason, itemStack);
@@ -474,10 +461,10 @@ public abstract class AbstractGui implements Gui, GuiParent {
                     return amountLeft;
             }
         }
-        
+
         return originalAmount;
     }
-    
+
     /**
      * Gets all {@link Inventory Inventories} and their slots that are used in this {@link AbstractGui}.
      *
@@ -487,27 +474,27 @@ public abstract class AbstractGui implements Gui, GuiParent {
     public Map<Inventory, Set<Integer>> getAllInventorySlots(Inventory... ignored) {
         HashMap<Inventory, Set<Integer>> slots = new HashMap<>();
         Set<Inventory> ignoredSet = Arrays.stream(ignored).collect(Collectors.toSet());
-        
+
         for (SlotElement element : slotElements) {
             if (element == null)
                 continue;
-            
+
             element = element.getHoldingElement();
             if (element instanceof SlotElement.InventorySlotElement) {
                 SlotElement.InventorySlotElement invElement = (SlotElement.InventorySlotElement) element;
                 Inventory inventory = invElement.getInventory();
                 if (ignoredSet.contains(inventory))
                     continue;
-                
+
                 slots.computeIfAbsent(inventory, i -> new HashSet<>()).add(invElement.getSlot());
             }
         }
-        
+
         return slots.entrySet().stream()
             .sorted(Comparator.<Map.Entry<Inventory, Set<Integer>>>comparingInt(entry -> entry.getKey().getGuiPriority()).reversed())
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
-    
+
     /**
      * Gets all {@link Inventory Inventories} that are used in this {@link AbstractGui}.
      * If {@link Gui#isIgnoreObscuredInventorySlots()}, is true, {@link ObscuredInventory ObscuredInventories}
@@ -520,14 +507,14 @@ public abstract class AbstractGui implements Gui, GuiParent {
     public Collection<Inventory> getAllInventories(Inventory... ignored) {
         if (!ignoreObscuredInventorySlots)
             return getAllInventorySlots(ignored).keySet();
-        
+
         ArrayList<Inventory> inventories = new ArrayList<>();
         for (Map.Entry<Inventory, Set<Integer>> entry : getAllInventorySlots(ignored).entrySet()) {
             Inventory inventory = entry.getKey();
             Set<Integer> slots = entry.getValue();
             inventories.add(new ObscuredInventory(inventory, slot -> !slots.contains(slot)));
         }
-        
+
         return inventories;
     }
     // endregion

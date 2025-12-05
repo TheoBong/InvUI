@@ -20,7 +20,6 @@ import java.util.logging.Level;
 /**
  * A serializable {@link Inventory} implementation that is identified by a {@link UUID} and backed by a simple {@link ItemStack} array.
  *
- * @see VirtualInventoryManager
  */
 public class VirtualInventory extends Inventory {
     

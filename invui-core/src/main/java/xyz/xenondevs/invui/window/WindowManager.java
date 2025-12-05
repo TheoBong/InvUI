@@ -166,14 +166,4 @@ public class WindowManager implements Listener {
         }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void handleItemPickup(EntityPickupItemEvent event) {
-        Entity entity = event.getEntity();
-        if (entity instanceof Player) {
-            Window window = getOpenWindow((Player) entity);
-            if (window instanceof AbstractDoubleWindow)
-                event.setCancelled(true);
-        }
-    }
-    
 }
